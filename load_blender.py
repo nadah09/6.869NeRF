@@ -66,11 +66,11 @@ def load_blender_data(basedir, half_res = False, testskip = 1):
     render_poses = torch.stack([pose_spherical(angle, -30.0, 4.0) for angle in np.linspace(-180, 180, 41)[:-1]], dim=0)
 
     if half_res:
-        m = torch.nn.AvgPool2Dd(2)
+        m = torch.nn.AvgPool2d(2)
         for idx in range(imgs.shape[0])
             imgs[idx,:,:,:] = m(imgs[idx])
 
-        H, W = imgs[0].shape[:2]    
+        H, W = imgs[0].shape[:2]
         focal = focal / 2.0
 
     return imgs, poses, render_poses, [H, W, focal], i_split
