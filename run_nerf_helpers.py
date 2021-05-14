@@ -2,6 +2,7 @@ import os
 import sys
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import numpy as np
 import imageio
 import json
@@ -215,7 +216,7 @@ def sample_pdf(bins, weights, N_samples, det=False):
     weights += 1e-5  # prevent nans
     pdf = weights / torch.sum(weights, -1, keepdim=True)
     cdf = torch.cumsum(pdf, -1)
-    cdf = torch.concat([torch.zeros_like(cdf[..., :1]), cdf], -1)
+    cdf = torch.cat([torch.zeros_like(cdf[..., :1]), cdf], -1)
 
     # Take uniform samples
     if det:
@@ -226,8 +227,8 @@ def sample_pdf(bins, weights, N_samples, det=False):
 
     # Invert CDF
     inds = torch.searchsorted(cdf, u, right=True)
-    below = torch.maximum(0, inds-1)
-    above = torch.minimum(cdf.shape[-1]-1, inds)
+    below = torch.maximum(torch.zeros_like(inds-1), inds-1)
+    above = torch.minimum(torch.zeros_like(inds)+cdf.shape[-1]-1, inds)
     inds_g = torch.stack([below, above], -1)
 
     # To replace tf.gather() with batch_dims

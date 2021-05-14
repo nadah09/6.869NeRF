@@ -1,3 +1,4 @@
 tiny_nerf_data.npz
 data/
 __pycache__/
+logs/
