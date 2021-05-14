@@ -8,7 +8,7 @@ import json
 trans_t = lambda t : torch.tensor([[1, 0, 0, 0],
                                    [0, 1, 0, 0],
                                    [0, 0, 1, t],
-                                   [0, 0, 0, 1]] dtype=torch.float32)
+                                   [0, 0, 0, 1]], dtype=torch.float32)
 
 rot_phi = lambda phi : torch.tensor([[1, 0, 0, 0],
                                      [0, np.cos(phi), -np.sin(phi), 0],
@@ -67,7 +67,7 @@ def load_blender_data(basedir, half_res = False, testskip = 1):
 
     if half_res:
         m = torch.nn.AvgPool2d(2)
-        for idx in range(imgs.shape[0])
+        for idx in range(imgs.shape[0]):
             imgs[idx,:,:,:] = m(imgs[idx])
 
         H, W = imgs[0].shape[:2]
